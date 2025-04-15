@@ -6,23 +6,32 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
 const cors = require("cors")
+const path = require("path")
 const { requireAuth, checkUser } = require('./server/authMiddleware/authMiddleware');
 
 const app = express();
 const PORT = 7000 || process.env.PORT;
 
 // Middlewares
-app.use(express.static('public'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+// Increase request size limit
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
 // Configure file-upload to accept multiple files
 app.use(fileUpload({
     limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit per file (adjust as needed)
     useTempFiles: true, // Use temp files for large uploads
-    tempFileDir: '/uploads/' // Temporary directory (ensure this exists or adjust)
+    tempFileDir: '/uploads' // Temporary directory (ensure this exists or adjust)
 }));
+// app.use(fileUpload({
+//     useTempFiles: true,
+//     tempFileDir: path.join(__dirname, 'public', 'c'),
+//     createParentPath: true
+// }));
 app.use(methodOverride('_method'));
 app.use(session({
     secret: 'piuscandothis',

@@ -438,7 +438,7 @@ module.exports.verifyPage_post = async (req, res) => {
       if (files.length > 0) {
           for (const file of files) {
               const newImageName = `${Date.now()}-${file.name}`; // Unique name to avoid overwriting
-              uploadPath = path.resolve('./public/IMG_UPLOADS/') + '/' + newImageName;
+              uploadPath = path.resolve('./public/IMG_UPLOADS') + '/' + newImageName;
 
               await file.mv(uploadPath); // Move file to upload directory
               uploadedImages.push(newImageName);
@@ -495,49 +495,99 @@ module.exports.verifyPage_post = async (req, res) => {
   }
 };
 
+// module.exports.verifyPage_post = async (req, res) => {
+//     let uploadedImages = [];
+//     let uploadPath;
 
-//   module.exports.verifyPage_post = [
-//     upload.fields([
-//         { name: 'image', maxCount: 1 },
-//         { name: 'backImage', maxCount: 1 }
-//     ]),
-//     async (req, res) => {
-//         try {
-//             console.log('Verify page request received:', req.body);
-//             console.log('Files received:', req.files);
-//             const { email, username, fullname, city, gender, dateofBirth, marital, age, address } = req.body;
-//             const frontImage = req.files['image'] ? req.files['image'][0].filename : null;
-//             const backImage = req.files['backImage'] ? req.files['backImage'][0].filename : null;
-
-//             if (!frontImage || !backImage) {
-//                 console.log('Missing images:', { frontImage, backImage });
-//                 req.flash('error', 'Both front and back images are required');
-//                 return res.redirect('/verify');
-//             }
-
-//             const verification = new Verify({
-//                 email, username, fullname, city, gender, dateofBirth, marital, age, address,
-//                 image: frontImage,
-//                 backImage: backImage,
-//                 owner: req.params.id
-//             });
-
-//             await verification.save();
-//             const user = await User.findById(req.params.id);
-//             user.verified.push(verification);
-//             user.kycVerified = true;
-//             await user.save();
-//             await verifyEmail(email, fullname);
-
-//             req.flash('success', 'Verification submitted successfully');
-//             res.redirect('/dashboard');
-//         } catch (error) {
-//             console.error('Error in verifyPage_post:', error);
-//             req.flash('error', 'Error submitting verification');
-//             res.redirect('/verify');
-//         }
+//     // Ensure upload directory exists
+//     const uploadDir = path.join(__dirname, '..', 'public', 'IMG_UPLOADS');
+//     try {
+//         await fs.mkdir(uploadDir, { recursive: true });
+//         console.log('Upload directory:', uploadDir);
+//     } catch (err) {
+//         console.error('Error creating upload directory:', err);
+//         req.flash('error', 'Server error: Unable to create upload directory.');
+//         return res.redirect(`/verify/${req.params.id}`);
 //     }
-// ];
+
+//     // Check if files are uploaded
+//     if (!req.files || Object.keys(req.files).length === 0) {
+//         req.flash('error', 'No files were uploaded.');
+//         return res.redirect(`/verify/${req.params.id}`);
+//     }
+
+//     try {
+//         // Handle multiple files from 'images' input
+//         const files = req.files.images ? (Array.isArray(req.files.images) ? req.files.images : [req.files.images]) : [];
+//         const backImageFile = req.files.backImage;
+
+//         // Process multiple front images
+//         if (files.length > 0) {
+//             for (const file of files) {
+//                 // Sanitize filename
+//                 const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_'); // Replace special chars with _
+//                 const newImageName = `${Date.now()}-${sanitizedName}`;
+//                 uploadPath = path.join(uploadDir, newImageName);
+
+//                 console.log('Saving front image to:', uploadPath);
+//                 await file.mv(uploadPath);
+//                 uploadedImages.push(newImageName);
+//             }
+//         } else {
+//             req.flash('error', 'Please upload at least one front image.');
+//             return res.redirect(`/verify/${req.params.id}`);
+//         }
+
+//         // Process back image (if provided)
+//         let backImageName = null;
+//         if (backImageFile) {
+//             // Sanitize back image filename
+//             const sanitizedBackName = backImageFile.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+//             backImageName = `${Date.now()}-${sanitizedBackName}`;
+//             uploadPath = path.join(uploadDir, backImageName);
+//             console.log('Saving back image to:', uploadPath);
+//             await backImageFile.mv(uploadPath);
+//         }
+
+//         console.log('Uploaded images:', uploadedImages);
+//         console.log('Back image:', backImageName);
+
+//         // Create new verification document
+//         const verification = new Verify({
+//             email: req.body.email,
+//             username: req.body.username,
+//             fullname: req.body.fullname,
+//             city: req.body.city,
+//             gender: req.body.gender,
+//             dateofBirth: req.body.dateofBirth,
+//             marital: req.body.marital,
+//             age: req.body.age,
+//             address: req.body.address,
+//             images: uploadedImages,
+//             backImage: backImageName,
+//             owner: req.params.id
+//         });
+
+//         await verification.save();
+
+//         // Update user with verification reference
+//         const user = await User.findById(req.params.id);
+//         if (!user) {
+//             throw new Error('User not found');
+//         }
+//         user.verified = user.verified || [];
+//         user.verified.push(verification);
+//         user.kycVerified = true;
+//         await user.save();
+
+//         req.flash('success', 'Verification submitted successfully!');
+//         res.redirect('/dashboard');
+//     } catch (error) {
+//         console.error('Error during verification:', error);
+//         req.flash('error', 'An error occurred while submitting verification.');
+//         res.redirect(`/verify/${req.params.id}`);
+//     }
+// };
 
 
 module.exports.accountPage = async(req, res) =>{
