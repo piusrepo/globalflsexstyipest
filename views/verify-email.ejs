@@ -1,0 +1,58 @@
+<%- include('partials/_header'); -%>
+
+<div class="container">
+    <h2>Verify Your Email</h2>
+    <% if (messages.error) { %>
+        <div class="alert alert-danger"><%= messages.error %></div>
+    <% } %>
+    <form id="verifyForm" method="POST">
+        <div class="form-group">
+            <label for="code">Verification Code</label>
+            <input type="text" class="form-control" id="code" name="code" required>
+            <span class="error code-error"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Verify</button>
+    </form>
+</div>
+
+<style>
+    .error { color: red; }
+    .container { max-width: 400px; margin: 50px auto; }
+</style>
+
+<script>
+    const form = document.getElementById('verifyForm');
+    const codeError = document.querySelector('.code-error');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        codeError.textContent = '';
+
+        const code = form.code.value;
+        try {
+            const res = await fetch('/verify-email', {
+                method: 'POST',
+                body: JSON.stringify({ code }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            console.log('Response status:', res.status);
+            if (!res.ok) {
+                const text = await res.text();
+                console.log('Response text:', text);
+                throw new Error('Server responded with an error');
+            }
+            const data = await res.json();
+            console.log('Response data:', data);
+            if (data.errors) {
+                codeError.textContent = data.errors.code || data.errors.server;
+            }
+            if (data.redirect) {
+                location.assign(data.redirect);
+            }
+        } catch (err) {
+            console.error('Fetch error:', err);
+            codeError.textContent = 'An error occurred. Please try again.';
+        }
+    });
+</script>
+<%- include('partials/_footer') %>

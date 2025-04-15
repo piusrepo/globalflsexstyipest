@@ -1,0 +1,93 @@
+<%- include('partials/dashboardHeader') %>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deposit History</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/depositMethod.css" />
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link href="/plugins/sweetalerts/sweetalert.css" rel="stylesheet" type="text/css" />
+    <style>
+        body {
+            background-image: radial-gradient(circle, rgba(0,0,0,1) 4%, rgba(121,123,135,1) 32%, rgba(0,0,0,1) 100%);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .deposit-item {
+            background-color: #1a1a1a;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        .deposit-image {
+            max-width: 250px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .alert {
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        hr {
+            border-color: #444;
+        }
+    </style>
+</head>
+<body>
+    <section class="navbar-top">
+        <div class="container">
+            <div class="navbar-left">
+                <a href="/navbarPage"><img src="/assets/vector/hamburger.svg" alt="hamburger" class="hamburger" /></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="jumbotron" style="background-color: black;">
+        <div class="container">
+            <h2>Deposit History</h2>
+            <hr />
+            <% if (messages.error) { %>
+                <div class="alert alert-danger"><%= messages.error %></div>
+            <% } %>
+            <% if (messages.success) { %>
+                <div class="alert alert-success"><%= messages.success %></div>
+            <% } %>
+            <% if (user.deposits && user.deposits.length > 0) { %>
+                <% user.deposits.forEach(deposit => { %>
+                    <div class="deposit-item">
+                        <p><strong>Deposit ID:</strong> <%= deposit._id %></p>
+                        <p><strong>Type:</strong> <%= deposit.type %></p>
+                        <p><strong>Amount:</strong> $<%= deposit.amount.toFixed(2) %></p>
+                        <p><strong>Status:</strong> 
+                            <span class="<%= deposit.status === 'pending' ? 'text-warning' : deposit.status === 'approved' ? 'text-success' : 'text-danger' %>">
+                                <%= deposit.status.charAt(0).toUpperCase() + deposit.status.slice(1) %>
+                            </span>
+                        </p>
+                        <p><strong>Narration:</strong> <%= deposit.narration || 'N/A' %></p>
+                        <p><strong>Date:</strong> <%= deposit.createdAt.toLocaleString() %></p>
+                        <% if (deposit.image) { %>
+                            <p><strong>Proof of Payment:</strong></p>
+                            <img src="/IMG_UPLOADS/<%= deposit.image %>" alt="Deposit Proof" class="deposit-image img-thumbnail">
+                        <% } else { %>
+                            <p>No proof of payment uploaded.</p>
+                        <% } %>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>No deposits found.</p>
+            <% } %>
+            <a href="/deposit" class="btn btn-primary mt-3">Make Another Deposit</a>
+        </div>
+    </section>
+
+    <script src="/plugins/jquery-3.1.1.min.js"></script>
+    <script src="/plugins/sweetalerts/sweetalert2.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+<%- include('partials/dashboardFooter') %>

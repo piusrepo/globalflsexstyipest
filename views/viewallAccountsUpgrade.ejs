@@ -1,0 +1,146 @@
+<%- include('partials/header') %>
+
+<head>
+    <title>Account Upgrade View</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assetss/index.css"> 
+    <link rel="stylesheet" href="/assets0/notify.css">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+        }
+        .list-group-item {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+        }
+        .list-group-item b {
+            color: #fff;
+        }
+        .img-thumbnail {
+            max-width: 300px;
+            max-height: 200px;
+            object-fit: contain;
+            background-color: #000;
+            border: 1px solid #444;
+        }
+        .breadcrumb-item {
+            color: #fff;
+        }
+        .breadcrumb-item.active {
+            color: #ccc;
+        }
+        .text-muted {
+            color: #aaa !important;
+        }
+    </style>
+</head>
+<body>
+    <section class="content">
+        <div id="a-notification" class="notification gone d-flex justify-content-start">
+            <div class="d-flex flex-column"></div>
+        </div>
+
+        <div class="d-flex justify-content-between from-top">
+            <div>
+                <a href="/adminnavbarPage"><img src="/assetss/img/ham.svg" alt="MENU" /></a>
+            </div>
+            <div class="d-flex flex-column">
+                <div id="google_translate_element"></div>
+                <script type="text/javascript">
+                    function googleTranslateElementInit() {
+                        new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+                    }
+                </script>
+                <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+            </div>
+            <div>
+                <a href="/account"><div class="ph"><img src="/assetss/img/pers.svg" alt="PROFILE" /></div></a>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-evenly flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2 text-white">Account Upgrade Details</h1>
+            <div class="btn-toolbar mb-2 mb-md-0"></div>
+        </div>
+
+        <div class="col py-3">
+            <div class="row">
+                <div class="col">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/all-accountUpgrade" class="text-white">All Upgrades</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                <%= upgrade.owner ? upgrade.owner.fullname : 'Unknown User' %>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col text-end text-muted">
+                    <b>Upgrade ID:</b> <%= upgrade._id %>
+                </div>
+            </div>
+        </div>
+
+        <ul class="list-group">
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col" style="max-width: 140px"><b>Plan:</b></div>
+                    <div class="col"><%= upgrade.Plan || 'N/A' %></div>
+                </div>
+            </li>
+            
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col" style="max-width: 140px"><b>Payment Method:</b></div>
+                    <div class="col"><%= upgrade.method || 'N/A' %></div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col" style="max-width: 140px"><b>Status:</b></div>
+                    <div class="col">
+                        <span class="<%= upgrade.status === 'pending' ? 'text-warning' : upgrade.status === 'approved' ? 'text-success' : 'text-danger' %>">
+                            <%= upgrade.status.charAt(0).toUpperCase() + upgrade.status.slice(1) %>
+                        </span>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col" style="max-width: 140px"><b>Payment Proof:</b></div>
+                    <div class="col">
+                        <% if (upgrade.image) { %>
+                            <img src="/IMG_UPLOADS/<%= upgrade.image %>" alt="Upgrade Proof" class="img-thumbnail">
+                        <% } else { %>
+                            <span>No proof uploaded</span>
+                        <% } %>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col" style="max-width: 140px"><b>Owner:</b></div>
+                    <div class="col">
+                        <%= upgrade.owner ? `${upgrade.owner.fullname} (${upgrade.owner.email})` : 'Unknown User' %>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col" style="max-width: 140px"><b>Date Created:</b></div>
+                    <div class="col"><%= upgrade.createdAt.toLocaleString() %></div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col" style="max-width: 140px"><b>Date Modified:</b></div>
+                    <div class="col"><%= upgrade.updatedAt.toLocaleString() %></div>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+<%- include('partials/footer') %>
