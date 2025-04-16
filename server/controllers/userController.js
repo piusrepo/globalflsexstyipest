@@ -444,7 +444,7 @@ module.exports.verifyPage_post = async (req, res) => {
               uploadedImages.push(newImageName);
           }
       } else {
-          req.flash('error', 'Please upload at least one front image.');
+          req.flash('error', 'Please upload at least one front image.');deposit
           return res.redirect(`/verify/${req.params.id}`);
       }
 
@@ -686,28 +686,21 @@ module.exports.upgradePage = async(req, res)=>{
 
 module.exports.upgradePage_post = async (req, res) => {
     let newImageName = null;
+    let uploadPath;
 
     try {
-        // Ensure IMG_UPLOADS directory exists
-        const uploadDir = path.join(__dirname, '..', 'public', 'IMG_UPLOADS');
-        await fs.mkdir(uploadDir, { recursive: true });
-
-        // Handle file upload
+     
         if (req.files && req.files.image) {
             const theImage = req.files.image;
-            newImageName = Date.now() + '-' + theImage.name; // Unique filename
-            const uploadPath = path.join(uploadDir, newImageName);
+            newImageName = `${Date.now()}-${theImage.name}`;
+            uploadPath = path.resolve('./public/IMG_UPLOADS/') + '/' + newImageName;
 
-            // Validate file type
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            if (!allowedTypes.includes(theImage.mimetype)) {
-                req.flash('error', 'Invalid file type. Please upload a JPEG, PNG, or GIF image.');
-                return res.redirect('/dashboard');
-            }
-
-            // Move file to upload path
             await theImage.mv(uploadPath);
+        } else {
+            req.flash('error', 'Please upload a proof of payment image');
+            return res.redirect(`/deposit`);
         }
+
 
         // Validate required fields
         if (!req.body.Plan || !req.body.method) {

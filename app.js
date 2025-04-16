@@ -25,7 +25,7 @@ app.use(cors());
 app.use(fileUpload({
     limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit per file (adjust as needed)
     useTempFiles: true, // Use temp files for large uploads
-    tempFileDir: '/uploads' // Temporary directory (ensure this exists or adjust)
+    tempFileDir: 'public/uploads' // Temporary directory (ensure this exists or adjust)
 }));
 // app.use(fileUpload({
 //     useTempFiles: true,
