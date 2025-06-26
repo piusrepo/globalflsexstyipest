@@ -10,7 +10,7 @@ const path = require("path")
 const { requireAuth, checkUser } = require('./server/authMiddleware/authMiddleware');
 
 const app = express();
-const PORT = 7000 || process.env.PORT;
+const PORT = 5500 || process.env.PORT;
 
 // Middlewares
 app.use(express.static(path.join(__dirname, 'public')));
