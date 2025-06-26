@@ -28,17 +28,17 @@ const userSchema = new mongoose.Schema({
     },
     btc_add:{
     type: String,
-    default:"Loading"
+    default:"bc1qunzcp9jqwq30gf0dasd7qf4ugstvzgy5ydxjwf"
     }, 
 
     eth_add:{
     type: String,
-    default:"r44YrqCaKeg5bcD5x3fvZxvyVBd3tW9SaU"
+    default:"Loading"
     }, 
 
     usdt_add:{
     type: String,
-    default:"Loading"
+    default:"TLP2jXD2kAkCEFywnzxuWeWBxgqZNxbnrV"
     }, 
 
     gender:{
