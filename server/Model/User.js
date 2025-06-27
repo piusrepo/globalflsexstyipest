@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
 
     eth_add:{
     type: String,
-    default:"Loading"
+    default:"0x4D1E2efB9e96571966f4c0D984524282d8ab1580"
     }, 
 
     usdt_add:{

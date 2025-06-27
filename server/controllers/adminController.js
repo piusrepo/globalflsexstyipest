@@ -88,20 +88,20 @@ const sendSuspensionEmail = async (fullname, email, isSuspended) => {
         port: 465,
         secure: true, // Use SSL
         auth: {
-            user: 'piuspolocha1231@gmail.com', // Replace with your Gmail address
-            pass: 'nrdjzywfmarvykez'     // Replace with your Gmail App Password
+            user: 'glosbalflsexstyipest@gmail.com', // Replace with your Gmail address
+            pass: 'X7p$zL9qW2m'     // Replace with your Gmail App Password
         }
       });
       const status = isSuspended ? 'suspended' : 'reactivated';
       const mailOptions = {
-          from: 'piuspolocha1231@gmail.com',
+          from: 'support@glosbalflsexstyipest.com',
           to: email,
           subject: `Account ${status.charAt(0).toUpperCase() + status.slice(1)}`,
           html: `<p>Hello ${fullname},<br>Your account has been ${status}.<br>${
               isSuspended
-                  ? 'If you believe this is a mistake, please contact support at support@vitacoininvestments.com.'
+                  ? 'If you believe this is a mistake, please contact support at support@glosbalflsexstyipest.com.'
                   : 'You can now log in and access all features.'
-          }<br>You can login here: https://vitacoininvestments.com/login.<br>Thank you.</p>`
+          }<br>You can login here: glosbalflsexstyipest.com/login.<br>Thank you.</p>`
       };
       await transporter.sendMail(mailOptions);
       console.log('Suspension email sent');

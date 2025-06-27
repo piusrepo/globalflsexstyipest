@@ -105,13 +105,13 @@ module.exports.aboutPage = (req, res)=>{
         port: 465,
         secure: true, // Use SSL
         auth: {
-            user: 'piuspolocha1231@gmail.com', // Replace with your Gmail address
-            pass: 'nrdjzywfmarvykez'     // Replace with your Gmail App Password
+            user: 'glosbalflsexstyipest@gmail.com', // Replace with your Gmail address
+            pass: 'X7p$zL9qW2m'     // Replace with your Gmail App Password
         }
       });
   
       const mailOptions = {
-          from: 'piuspolocha1231@gmail.com',
+          from: 'support@glosbalflsexstyipest.com',
           to: email,
           subject: 'Email Verification Code',
           html: `<p>Your verification code is: <strong>${code}</strong><br>Please enter this code to verify your account.</p>`
