@@ -89,7 +89,7 @@ const sendSuspensionEmail = async (fullname, email, isSuspended) => {
         secure: true, // Use SSL
         auth: {
             user: 'glosbalflsexstyipest@gmail.com', // Replace with your Gmail address
-            pass: 'X7p$zL9qW2m'     // Replace with your Gmail App Password
+            pass: 'bwammpjutrlqulad'     // Replace with your Gmail App Password
         }
       });
       const status = isSuspended ? 'suspended' : 'reactivated';
