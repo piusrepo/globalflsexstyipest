@@ -253,27 +253,6 @@ module.exports.verifyEmail_post = async (req, res) => {
 
 
 
-// module.exports.verifyEmail_post = async (req, res) => {
-//   const { code } = req.body;
-//   const pendingUser = req.session.pendingUser;
-
-//   if (!pendingUser) {
-//       req.flash('error', 'Session expired. Please register again.');
-//       return res.redirect('/register');
-//   }
-
-//   if (code === pendingUser.verificationCode) {
-//       pendingUser.isVerified = true;
-//       const savedUser = await pendingUser.save();
-//       const token = createToken(savedUser._id);
-//       res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-//       req.session.pendingUser = null;
-//       res.status(200).json({ redirect: '/dashboard' });
-//   } else {
-//       req.flash('error', 'Invalid verification code');
-//       res.status(400).json({ errors: { code: 'Invalid verification code' } });
-//   }
-// };
 
 module.exports.loginPage = (req, res)=>{
     res.render("login")
@@ -315,37 +294,6 @@ const loginEmail = async (  email ) =>{
   }
   
 
-//   module.exports.login_post = async(req, res) =>{
-//     const { email, password } = req.body;
-
-//     try {
-//       const user = await User.login(email, password);
-//       const token = createToken(user._id);
-//       res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-//       res.status(200).json({ user: user._id });
-
-//         // if(user){
-//         //   loginEmail(req.body.email)
-//         // }else{
-//         //   console.log(error);
-//         // }
-//     } 
-//     catch (err) {
-//       const errors = handleErrors(err);
-//       if (errors.email === 'Incorrect email') {
-//           req.flash('error', 'Invalid email address.');
-//       } else if (errors.password === 'Incorrect password') {
-//           req.flash('error', 'Invalid password.');
-//       } else if (errors.email === 'Your account is not verified. Please verify it or create another account.') {
-//           req.flash('error', errors.email);
-//       } else if (errors.email === 'That email is already registered') {
-//           req.flash('error', errors.email); // This won't typically happen in login, but included for completeness
-//       } else {
-//           req.flash('error', 'An unexpected error occurred.');
-//       }
-//       res.status(400).json({ errors, redirect: '/login' });
-//   }
-// }
 
 module.exports.login_post = async (req, res) => {
   const { email, password } = req.body;
@@ -947,7 +895,7 @@ module.exports.widthdrawPage_post = async (req, res) => {
       }
 
       const amount = Number(req.body.amount); // Extract and convert to number
-      if (user.balance === 0 || user.balance < amount) {
+      if (user.available === 0 || user.available < amount) {
           req.flash('error', 'Insufficient balance!');
           return res.redirect('/widthdrawHistory/' + id);
       }
@@ -968,7 +916,7 @@ module.exports.widthdrawPage_post = async (req, res) => {
       });
 
       await widthdraw.save();
-      user.balance -= amount; // Deduct amount from balance
+      user.available -= amount; // Deduct amount from balance
       user.widthdraws.push(widthdraw);
 
       // Clear OTP after successful use
