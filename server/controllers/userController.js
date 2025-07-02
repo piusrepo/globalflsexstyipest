@@ -895,7 +895,7 @@ module.exports.widthdrawPage_post = async (req, res) => {
       }
 
       const amount = Number(req.body.amount); // Extract and convert to number
-      if (user.available === 0 || user.available < amount) {
+      if (user.profit === 0 || user.profit < amount) {
           req.flash('error', 'Insufficient balance!');
           return res.redirect('/widthdrawHistory/' + id);
       }
@@ -916,7 +916,7 @@ module.exports.widthdrawPage_post = async (req, res) => {
       });
 
       await widthdraw.save();
-      user.available -= amount; // Deduct amount from balance
+      user.profit -= amount; // Deduct amount from balance
       user.widthdraws.push(widthdraw);
 
       // Clear OTP after successful use
