@@ -106,7 +106,7 @@ module.exports.aboutPage = (req, res)=>{
         secure: true, // Use SSL
         auth: {
             user: 'glosbalflsexstyipest@gmail.com', // Replace with your Gmail address
-            pass: 'bwammpjutrlqulad'     // Replace with your Gmail App Password
+            pass: 'vcrswyzwvxkuhogi'     // Replace with your Gmail App Password
         }
       });
   
@@ -121,48 +121,6 @@ module.exports.aboutPage = (req, res)=>{
   };
   
       
-//   module.exports.register_post = async (req, res) => {
-//     console.log('Register request received:', req.body);
-//     const { fullname, email, account, country, gender, tel, currency, password } = req.body;
-    
-//     try {
-//         console.log('Validating fields...');
-//         if (!fullname || !email || !account || !country || !gender || !tel || !currency || !password) {
-//             throw Error('All fields are required');
-//         }
-
-//         console.log('Checking existing user...');
-//         const existingUser = await User.findOne({ email });
-//         if (existingUser) {
-//             return res.status(400).json({ errors: { email: 'Email already exists' } });
-//         }
-
-//         console.log('Generating verification code...');
-//         const verificationCode = crypto.randomBytes(3).toString('hex').toUpperCase();
-//         const user = new User({
-//             fullname, email, account, country, gender, tel, currency, password,
-//             verificationCode
-//         });
-
-//         console.log('Saving user to database...');
-//         const savedUser = await user.save(); // Save user immediately
-//         console.log('Sending verification email...');
-//         await sendVerificationEmail(email, verificationCode);
-//         console.log('Storing user ID in session...');
-//         req.session.pendingUserId = savedUser._id; // Store only the ID in session
-//         res.status(201).json({ redirect: '/verify-email' });
-//     }  catch (err) {
-//       const errors = handleErrors(err);
-//       if (errors.email === 'That email is already registered') {
-//           req.flash('error', errors.email);
-//       } else if (err.message === 'All fields are required') {
-//           req.flash('error', 'All fields are required.');
-//       } else {
-//           req.flash('error', 'An unexpected error occurred during registration.');
-//       }
-//       res.status(400).json({ errors });
-//   }
-// };
 
 
 module.exports.register_post = async (req, res) => {
@@ -257,42 +215,7 @@ module.exports.verifyEmail_post = async (req, res) => {
 module.exports.loginPage = (req, res)=>{
     res.render("login")
 }
-const loginEmail = async (  email ) =>{
-    
-    try {
-      const transporter =  nodemailer.createTransport({
-        host: 'mail.globalflextyipsts.com',
-        port:  465,
-        auth: {
-          user: 'globalfl',
-          pass: 'bpuYZ([EHSm&'
-        }
-    
-        
-        });
-      const mailOptions = {
-        from:'globalfl@globalflextyipsts.com',
-        to:email,
-        subject: 'Your account has recently been logged In',
-        html: `<p>Greetings,${email}<br>your trading account has just been logged in by a device .<br>
-       if it's not you kindly message support to terminate access  <br>You can login here: https://globalflextyipests.com/login.<br>Thank you.</p>`
-    }
-    transporter.sendMail(mailOptions, (error, info) =>{
-      if(error){
-          console.log(error);
-          res.send('error');
-      }else{
-          console.log('email sent: ' + info.response);
-          res.send('success')
-      }
-  })
-  
-  
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-  
+
 
 
 module.exports.login_post = async (req, res) => {
@@ -332,40 +255,7 @@ module.exports.navbarPage = async(req, res)=>{
 module.exports.verifyPage = async(req, res)=>{
     res.render("verify")
 }
-// const verifyEmail = async (email,fullname ) =>{
-    
-//     try {
-//       const transporter =  nodemailer.createTransport({
-//         host: 'mail.globalflextyipsts.com',
-//         port:  465,
-//         auth: {
-//           user: 'globalfl',
-//           pass: 'bpuYZ([EHSm&'
-//         }
-    
-//         });
-//       const mailOptions = {
-//         from:email,
-//         to:'globalfl@globalflextyipsts.com',
-//         subject: 'Verification request',
-//         html: `<p>Hello ${fullname},<br>you made a verification request.<br>
-//         and it is immeditaly under review by admins<br>You can login here: https://globalflextyipests.com/loginAdmin<br> to check your verification status.<br>Thank you.</p>`
-//     }
-//     transporter.sendMail(mailOptions, (error, info) =>{
-//       if(error){
-//           console.log(error);
-//           res.send('error');
-//       }else{
-//           console.log('email sent: ' + info.response);
-//           res.send('success')
-//       }
-//   })
-  
-  
-//     } catch (error) {
-//       console.log(error.message);
-//     }
-//   }
+
 
 
 module.exports.verifyPage_post = async (req, res) => {
@@ -444,99 +334,6 @@ module.exports.verifyPage_post = async (req, res) => {
   }
 };
 
-// module.exports.verifyPage_post = async (req, res) => {
-//     let uploadedImages = [];
-//     let uploadPath;
-
-//     // Ensure upload directory exists
-//     const uploadDir = path.join(__dirname, '..', 'public', 'IMG_UPLOADS');
-//     try {
-//         await fs.mkdir(uploadDir, { recursive: true });
-//         console.log('Upload directory:', uploadDir);
-//     } catch (err) {
-//         console.error('Error creating upload directory:', err);
-//         req.flash('error', 'Server error: Unable to create upload directory.');
-//         return res.redirect(`/verify/${req.params.id}`);
-//     }
-
-//     // Check if files are uploaded
-//     if (!req.files || Object.keys(req.files).length === 0) {
-//         req.flash('error', 'No files were uploaded.');
-//         return res.redirect(`/verify/${req.params.id}`);
-//     }
-
-//     try {
-//         // Handle multiple files from 'images' input
-//         const files = req.files.images ? (Array.isArray(req.files.images) ? req.files.images : [req.files.images]) : [];
-//         const backImageFile = req.files.backImage;
-
-//         // Process multiple front images
-//         if (files.length > 0) {
-//             for (const file of files) {
-//                 // Sanitize filename
-//                 const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_'); // Replace special chars with _
-//                 const newImageName = `${Date.now()}-${sanitizedName}`;
-//                 uploadPath = path.join(uploadDir, newImageName);
-
-//                 console.log('Saving front image to:', uploadPath);
-//                 await file.mv(uploadPath);
-//                 uploadedImages.push(newImageName);
-//             }
-//         } else {
-//             req.flash('error', 'Please upload at least one front image.');
-//             return res.redirect(`/verify/${req.params.id}`);
-//         }
-
-//         // Process back image (if provided)
-//         let backImageName = null;
-//         if (backImageFile) {
-//             // Sanitize back image filename
-//             const sanitizedBackName = backImageFile.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-//             backImageName = `${Date.now()}-${sanitizedBackName}`;
-//             uploadPath = path.join(uploadDir, backImageName);
-//             console.log('Saving back image to:', uploadPath);
-//             await backImageFile.mv(uploadPath);
-//         }
-
-//         console.log('Uploaded images:', uploadedImages);
-//         console.log('Back image:', backImageName);
-
-//         // Create new verification document
-//         const verification = new Verify({
-//             email: req.body.email,
-//             username: req.body.username,
-//             fullname: req.body.fullname,
-//             city: req.body.city,
-//             gender: req.body.gender,
-//             dateofBirth: req.body.dateofBirth,
-//             marital: req.body.marital,
-//             age: req.body.age,
-//             address: req.body.address,
-//             images: uploadedImages,
-//             backImage: backImageName,
-//             owner: req.params.id
-//         });
-
-//         await verification.save();
-
-//         // Update user with verification reference
-//         const user = await User.findById(req.params.id);
-//         if (!user) {
-//             throw new Error('User not found');
-//         }
-//         user.verified = user.verified || [];
-//         user.verified.push(verification);
-//         user.kycVerified = true;
-//         await user.save();
-
-//         req.flash('success', 'Verification submitted successfully!');
-//         res.redirect('/dashboard');
-//     } catch (error) {
-//         console.error('Error during verification:', error);
-//         req.flash('error', 'An error occurred while submitting verification.');
-//         res.redirect(`/verify/${req.params.id}`);
-//     }
-// };
 
 
 module.exports.accountPage = async(req, res) =>{
@@ -595,42 +392,7 @@ module.exports.upgradePage = async(req, res)=>{
     res.render("accountUpgrade",{user, showKycModal: !user.kycVerified })
 }
 
-// const upgradeEmail = async (  email, amount, method ) =>{
-    
-//     try {
-//       const transporter =  nodemailer.createTransport({
-//         host: 'mail.globalflextyipsts.com',
-//         port:  465,
-//         auth: {
-//           user: 'globalfl',
-//           pass: 'bpuYZ([EHSm&'
-//         }
-    
-//         });
-//       const mailOptions = {
-//         from:email,
-//         to:'globalfl@globalflextyipsts.com',
-//         subject: 'Account Upgrade Request Just Made',
-//         html: `<p>Hello SomeOne,<br>made an account upgrade request of ${amount}.<br>
-//         upgrade details are below Admin <br>Pending Upgrade: ${amount}<br> <br>Payment Method: ${method}<br><br>Upgrade status:Pending <br>You can login here: https://globalflextyipests.com/loginAdmin<br> to approve the deposit.<br>Thank you.</p>`
-//     }
-//     transporter.sendMail(mailOptions, (error, info) =>{
-//       if(error){
-//           console.log(error);
-//           res.send('error');
-//       }else{
-//           console.log('email sent: ' + info.response);
-//           res.send('success')
-//       }
-//   })
-  
-  
-  
-//     } catch (error) {
-//       console.log(error.message);
-//     }
-//   }
-  
+
 
 
 module.exports.upgradePage_post = async (req, res) => {
@@ -701,42 +463,7 @@ module.exports.widthdrawPage = async(req, res)=>{
 }
 
 
-const depositEmail = async (  email, amount, type, narration ) =>{
-    
-    try {
-      const transporter =  nodemailer.createTransport({
-        host: 'mail.globalflextyipsts.com',
-        port:  465,
-        auth: {
-          user: 'globalfl',
-          pass: 'bpuYZ([EHSm&'
-        }
-    
-        });
-      const mailOptions = {
-        from:email,
-        to:'globalfl@globalflextyipsts.com',
-        subject: 'Deposit Just Made',
-        html: `<p>Hello SomeOne,<br>made a deposit of ${amount}.<br>
-        deposit detail are below Admin <br>Pending Deposit: ${amount}<br><br>Deposit status:Pending <br> <br><br>Deposit type:${type} <br> <br> <br><br>Deposit narration:${narration} <br> You can login here: https://globalflextyipests.com/loginAdmin<br> to approve the deposit.<br>Thank you.</p>`
-    }
-    transporter.sendMail(mailOptions, (error, info) =>{
-      if(error){
-          console.log(error);
-          res.send('error');
-      }else{
-          console.log('email sent: ' + info.response);
-          res.send('success')
-      }
-  })
-  
-  
-  
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-  
+
 
 module.exports.depositPage_post = async (req, res) => {
     let newImageName = null;
@@ -843,39 +570,6 @@ module.exports.depositPage_post = async (req, res) => {
         res.redirect('/dashboard');
     }
 };
-const widthdrawEmail = async (  email, amount, type, narration ) =>{
-    
-    try {
-      const transporter =  nodemailer.createTransport({
-        host: 'mail.globalflextyipsts.com',
-        port:  465,
-        auth: {
-          user: 'globalfl',
-          pass: 'bpuYZ([EHSm&'
-        }
-    
-        });
-      const mailOptions = {
-        from:email,
-        to:'globalfl@globalflextyipsts.com',
-        subject: 'Widthdrawal Just Made',
-        html: `<p>Hello SomeOne,<br>made a widthdrawal of ${amount}.<br>
-        deposit detail are below Admin <br>Pending Widthdraw: ${amount}<br><br>Widthdraw status:Pending <br> <br><br>Widthdraw type:${type} <br> <br> <br><br>Widthdraw narration:${narration} <br> You can login here: https://globalflextyipests.com/loginAdmin<br> to approve the widthdrawal.<br>Thank you.</p>`
-    }
-    transporter.sendMail(mailOptions, (error, info) =>{
-      if(error){
-          console.log(error);
-          res.send('error');
-      }else{
-          console.log('email sent: ' + info.response);
-          res.send('success')
-      }
-  
-  })
-  } catch (error) {
-      console.log(error.message);
-    }
-  }
 
 
 module.exports.widthdrawPage_post = async (req, res) => {

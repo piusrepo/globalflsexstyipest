@@ -55,6 +55,7 @@ app.use((req, res, next) => {
     next();
 });
 
+
 app.get('*', checkUser);
 app.use('/', require('./server/Route/indexRoute'));
 app.use('/', requireAuth, require('./server/Route/userRoute'));
