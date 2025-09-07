@@ -105,8 +105,8 @@ module.exports.aboutPage = (req, res)=>{
         port: 465,
         secure: true, // Use SSL
         auth: {
-            user: 'glosbalflsexstyipest@gmail.com', // Replace with your Gmail address
-            pass: 'vcrswyzwvxkuhogi'     // Replace with your Gmail App Password
+            user: 'gstyipest@gmail.com', // Replace with your Gmail address
+            pass: 'lsqtlkvbncrjigwj'     // Replace with your Gmail App Password
         }
       });
   
