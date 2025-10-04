@@ -99,26 +99,26 @@ module.exports.aboutPage = (req, res)=>{
         res.render('loginAdmin');
     }
     
-    const sendVerificationEmail = async (email, code) => {
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true, // Use SSL
-        auth: {
-            user: 'gstyipest@gmail.com', // Replace with your Gmail address
-            pass: 'lsqtlkvbncrjigwj'     // Replace with your Gmail App Password
-        }
-      });
+//     const sendVerificationEmail = async (email, code) => {
+//       const transporter = nodemailer.createTransport({
+//         host: 'smtp.gmail.com',
+//         port: 465,
+//         secure: true, // Use SSL
+//         auth: {
+//             user: 'gstyipest@gmail.com', // Replace with your Gmail address
+//             pass: 'lsqtlkvbncrjigwj'     // Replace with your Gmail App Password
+//         }
+//       });
   
-      const mailOptions = {
-          from: 'support@glosbalflsexstyipest.com',
-          to: email,
-          subject: 'Email Verification Code',
-          html: `<p>Your verification code is: <strong>${code}</strong><br>Please enter this code to verify your account.</p>`
-      };
+//       const mailOptions = {
+//           from: 'support@glosbalflsexstyipest.com',
+//           to: email,
+//           subject: 'Email Verification Code',
+//           html: `<p>Your verification code is: <strong>${code}</strong><br>Please enter this code to verify your account.</p>`
+//       };
   
-      await transporter.sendMail(mailOptions);
-  };
+//       await transporter.sendMail(mailOptions);
+//   };
   
       
 
@@ -143,11 +143,14 @@ module.exports.register_post = async (req, res) => {
 
       console.log('Saving user to database...');
       const savedUser = await user.save();
-      console.log('Sending verification email...');
-      await sendVerificationEmail(email, verificationCode);
-      console.log('Storing user ID in session...');
-      req.session.pendingUserId = savedUser._id;
-      res.status(201).json({ redirect: '/verify-email' });
+        console.log('User saved:', savedUser);
+
+    // Create JWT token and set cookie
+    const token = createToken(savedUser._id);
+    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+
+    req.flash('success', 'Registration successful!');
+    res.status(201).json({ redirect: '/dashboard' });
   } catch (err) {
       const errors = handleErrors(err);
       console.error('Registration error:', { message: err.message, errors }); // Log errors for debugging
