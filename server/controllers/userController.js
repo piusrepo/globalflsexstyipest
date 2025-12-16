@@ -134,11 +134,10 @@ module.exports.register_post = async (req, res) => {
           throw Error('All fields are required');
       }
 
-      console.log('Generating verification code...');
-      const verificationCode = crypto.randomBytes(3).toString('hex').toUpperCase();
+    //   console.log('Generating verification code...');
+    //   const verificationCode = crypto.randomBytes(3).toString('hex').toUpperCase();
       const user = new User({
           fullname, email, account, country, gender, tel, currency, password,
-          verificationCode
       });
 
       console.log('Saving user to database...');
